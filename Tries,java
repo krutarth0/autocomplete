@@ -10,6 +10,7 @@ public class Tries {
     ArrayList<StringBuilder> list = new ArrayList<>(); // -> List of suested words/Strings
     ArrayList<Character> listChar = new ArrayList<>();// ->higher order nodes (from inputs)
     ArrayList<Character> tempListChar = new ArrayList<>(); // -> temp traversal nodes
+    ArrayList<TrieNode> tempList = new ArrayList<>();//maintains nodes ,could've used map instea of tempListChar and tempList, maybe nextr time
 
     public Tries(){
         this.root = new TrieNode('*'); //root is starting with * 
