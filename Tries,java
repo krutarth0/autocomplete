@@ -1,0 +1,121 @@
+package com.company;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Set;
+
+
+public class Tries {
+    TrieNode root;
+    ArrayList<StringBuilder> list = new ArrayList<>();
+    ArrayList<Character> listChar = new ArrayList<>();
+    ArrayList<Character> tempListChar = new ArrayList<>();
+
+    public Tries(){
+        this.root = new TrieNode('*');
+    }
+
+    public void add(String s){
+        TrieNode temp = root;
+        for(int i=0;i<s.length();i++){
+            char crr = s.charAt(i);
+            TrieNode child = temp.getChild(crr);
+            if(child==null){
+                temp.children.add(new TrieNode(crr));
+            }
+            temp = temp.getChild(crr);
+        }
+        temp.children.add(new TrieNode('#'));
+        temp = temp.getChild('#');
+        temp.end = true;
+
+    }
+    public TrieNode getPrefix(String s){
+            TrieNode temp = root;
+            for(int i=0;i<s.length();i++){
+                char crr = s.charAt(i);
+               if(i<s.length()-1)listChar.add(crr);
+                temp=temp.getChild(crr);
+                }
+//            System.out.println("prefix-> "+temp.lable);
+//        for(TrieNode n:temp.children)System.out.println("prefix child-> "+n.lable);
+            return temp;
+    }
+    public void lookupHelper(TrieNode node){
+        if(node.lable =='#'){
+            list.add(arrayToString(listChar).append(arrayToString(tempListChar)));
+            for(int i=tempListChar.size()-1;i>=0;i--){
+                if(!tempList.get(i).branchNode) {
+                    tempListChar.remove(i);
+                }else{
+                    break;
+                }
+            }
+            return;
+        }
+        tempListChar.add(node.lable);
+        tempList.add(node);
+        if(node.children.size()>1){
+            node.branchNode = true;
+        }
+        for(TrieNode n:node.children){
+            lookupHelper(n);
+            if(node.branchNode){
+                node.branchNode = false;
+            }
+        }
+
+    }
+    public ArrayList<StringBuilder> lookup(String s){
+            TrieNode startFrom = getPrefix(s);
+            lookupHelper(startFrom);
+            return list;
+    }
+
+    public StringBuilder arrayToString(ArrayList<Character> charArr){
+        StringBuilder builder = new StringBuilder();
+        for(char c : charArr) {
+            builder.append(c);
+        }
+        return builder;
+    }
+    public void printTries(TrieNode root){
+        System.out.printf("%c ",root.lable);
+        for(TrieNode child:root.children) {
+            printTries(child);
+        }
+    }
+
+}
+
+ class TrieNode{
+    char lable;
+    LinkedList<TrieNode> children;
+    boolean end;
+    boolean branchNode=false;
+    int index =0;
+    public TrieNode(char c){
+        this.lable = c;
+        children = new LinkedList<>();
+    }
+    public TrieNode getChild(char c){
+        if(children!=null){
+            for(TrieNode child:children){
+                if (child.lable == c){
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    public TrieNode getNext(){
+        if(!children.isEmpty()) {
+            TrieNode temp = children.get(index);
+            index++;
+            return temp;
+        }
+        return null;
+    }
+
+}
