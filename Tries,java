@@ -7,15 +7,15 @@ import java.util.Set;
 
 public class Tries {
     TrieNode root;
-    ArrayList<StringBuilder> list = new ArrayList<>();
-    ArrayList<Character> listChar = new ArrayList<>();
-    ArrayList<Character> tempListChar = new ArrayList<>();
+    ArrayList<StringBuilder> list = new ArrayList<>(); // -> List of suested words/Strings
+    ArrayList<Character> listChar = new ArrayList<>();// ->higher order nodes (from inputs)
+    ArrayList<Character> tempListChar = new ArrayList<>(); // -> temp traversal nodes
 
     public Tries(){
-        this.root = new TrieNode('*');
+        this.root = new TrieNode('*'); //root is starting with * 
     }
 
-    public void add(String s){
+    public void add(String s){  // -> adds strings to the tries data structures with ending nodes of '#'
         TrieNode temp = root;
         for(int i=0;i<s.length();i++){
             char crr = s.charAt(i);
@@ -30,7 +30,7 @@ public class Tries {
         temp.end = true;
 
     }
-    public TrieNode getPrefix(String s){
+    public TrieNode getPrefix(String s){  //-> gives search prefix [ex. search "ba" gives pointer from 'a' and listChar =['b',]
             TrieNode temp = root;
             for(int i=0;i<s.length();i++){
                 char crr = s.charAt(i);
@@ -41,7 +41,7 @@ public class Tries {
 //        for(TrieNode n:temp.children)System.out.println("prefix child-> "+n.lable);
             return temp;
     }
-    public void lookupHelper(TrieNode node){
+    public void lookupHelper(TrieNode node){  //-> recursion with terminating condition of '#' 
         if(node.lable =='#'){
             list.add(arrayToString(listChar).append(arrayToString(tempListChar)));
             for(int i=tempListChar.size()-1;i>=0;i--){
@@ -66,20 +66,20 @@ public class Tries {
         }
 
     }
-    public ArrayList<StringBuilder> lookup(String s){
+    public ArrayList<StringBuilder> lookup(String s){ // -> wrapper methods that eraps prefic and recursion
             TrieNode startFrom = getPrefix(s);
             lookupHelper(startFrom);
             return list;
     }
 
-    public StringBuilder arrayToString(ArrayList<Character> charArr){
+    public StringBuilder arrayToString(ArrayList<Character> charArr){  // char[] array to string
         StringBuilder builder = new StringBuilder();
         for(char c : charArr) {
             builder.append(c);
         }
         return builder;
     }
-    public void printTries(TrieNode root){
+    public void printTries(TrieNode root){ //-> for debuging, print whole tries data strucutres in preOrder  
         System.out.printf("%c ",root.lable);
         for(TrieNode child:root.children) {
             printTries(child);
@@ -88,17 +88,17 @@ public class Tries {
 
 }
 
- class TrieNode{
+ class TrieNode{  //-> individual trie node
     char lable;
     LinkedList<TrieNode> children;
-    boolean end;
+    boolean end; // didnt use, but can optimize with it i guess , good luck :)
     boolean branchNode=false;
     int index =0;
     public TrieNode(char c){
         this.lable = c;
         children = new LinkedList<>();
     }
-    public TrieNode getChild(char c){
+    public TrieNode getChild(char c){ //find the specific child and return
         if(children!=null){
             for(TrieNode child:children){
                 if (child.lable == c){
@@ -109,7 +109,7 @@ public class Tries {
         return null;
     }
 
-    public TrieNode getNext(){
+    public TrieNode getNext(){// to get the next child in childrean array [like node.left ot node.right in binary tree]
         if(!children.isEmpty()) {
             TrieNode temp = children.get(index);
             index++;
